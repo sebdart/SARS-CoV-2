@@ -11,8 +11,8 @@ Last update: *21<sup>st</sup> November 2020*.
 * [Getting the Data](#getting-the-data)
   * [From GISAID](#from-gisaid)
   * [From Genbank](#from-genbank)
-* [Curing and Reformatting the Data and Metadata prior to bioinformatic modeling](#curing-and-reformatting-the-data-and-metadata-prior-to-bioinformatic-modeling)
-* [Nucleotide Site Masking](#nucleotide-site-masking)
+* [Curating and Reformatting the Data and Metadata prior to bioinformatic modeling](#curating-and-reformatting-the-data-and-metadata-prior-to-bioinformatic-modeling)
+* [Nucleotide Site Masking and Minimum Length](#site-masking-and-minimum-length)
 * [Tree Construction](#tree-construction)
 * [Tree Dating](#tree-dating)
 * [DOD SARS-CoV-2 Clade System](#dod-sars-cov-2-clade-system)
@@ -100,17 +100,18 @@ Click on *Build Custom*
 > You will download a file named *sequences.fasta*; this file will have to be processed and curated by a Linux Bash script to be bioinformatically compliant with NextStrain's Augur (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 or 2).
 
 
-## Curing and Reformatting the Data and Metadata prior to bioinformatic modeling
+## Curating and Reformatting the Data and Metadata prior to bioinformatic modeling
 
      About DOD's minimum nucleotide completeness in SARS-CoV-2 sequences
+     Running Scripts coming soon.
 
-## Site Masking
+## Site Masking and Minimum Length
 
 This is an important aspect in our DOD's protocol because it leads to slightly different results in the branching and clade naming in SARS-CoV-2 phylogenetic trees when compared with other methodologies which do not aggressively mask problematic sides.
 
-We follow the recommendation from [European Molecular Biology Laboratory, UK](https://www.ebi.ac.uk/) as detailed in [their paper](https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473) and their [GITHUB](https://github.com/W-L/ProblematicSites_SARS-CoV2). Specifically, many mutations seen several times along the phylogenetic tree (ie., highly homoplasic) may be likely the result of contamination, recurrent sequencing errors, or hypermutability, than selection or recombination. Some homoplasic substitutions seem laboratory-specific, suggesting that they might arise from specific combinations of sample preparation, sequencing technology, and consensus calling approaches. Hence, these "suspect mutation" sites are masked as decribed in the Table below.
+We follow the recommendation from [European Molecular Biology Laboratory, UK](https://www.ebi.ac.uk/) as detailed in [their paper](https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473) and their [GITHUB](https://github.com/W-L/ProblematicSites_SARS-CoV2). Specifically, many mutations seen several times along the phylogenetic tree (ie., highly homoplasic) may be likely the result of contamination, recurrent sequencing errors, or hypermutability, than selection or recombination. Some homoplasic substitutions seem laboratory-specific, suggesting that they might arise from specific combinations of sample preparation, sequencing technology, and consensus calling approaches. Hence, these sites subejct too "suspect mutations" are masked (ie., ignored) in our bioinfomrtaic modeling as decribed in the Table below.
 
-As commonly done, we mask start and end positions 1–55 and 29804–29903.
+As commonly done, we systematically mask positions 1–55 and 29804–29903.
 
 We aslo filter out any sequences that have too few resolved characters (ie., less than ***29,400*** reference bases) instead of the more common threshold of *29,000*.
 
@@ -122,8 +123,8 @@ We aslo filter out any sequences that have too few resolved characters (ie., les
 |ALT              | List of alternative alleles at the position (IUPAC ambiguity code) |
 |GENE             | Position falls into range of this gene |
 |AA_POS           | Position of amino acid residue within gene |
-|REF_AA           | Reference amino acid residue |
-|ALT_AA           | List of alternative amino acid residues (IUPAC ambiguity code) |
+|AA_REF           | Reference amino acid residue |
+|AA_ALT           | List of alternative amino acid residues (IUPAC ambiguity code) |
 
 
 |    POS    |REF|    ALT    |FILTER |                          JUSTIFICATION                                |   GENE    |AA_POS|AA_REF|  AA_ALT   |
@@ -243,26 +244,26 @@ Very roughly, one can create a clade system based either on specific mutations a
 
 ### How does it compare with other SARS-CoV-2 clades
 
-Pangolin Clades (nucleotide based) can be--somehow--[visualized here](https://nextstrain.org/ncov/global?c=pangolin_lineage&d=tree,entropy,frequencies&p=full) on NextStrain website (3,564 sample).
+* Pangolin Clades (nucleotide based) can be--somehow--[visualized here](https://nextstrain.org/ncov/global?c=pangolin_lineage&d=tree,entropy,frequencies&p=full) on NextStrain website (3,564 sample).
 
-NexStrain Clades (time based) can be [visualized here](https://nextstrain.org/ncov/global?c=clade_membership&d=tree,entropy,frequencies&p=full) (3,564 sample).
+* NexStrain Clades (time based) can be [visualized here](https://nextstrain.org/ncov/global?c=clade_membership&d=tree,entropy,frequencies&p=full) (3,564 sample).
 
-GISAID Clades (nucleotide based) can be [visualized here](https://nextstrain.org/ncov/global?c=GISAID_clade&d=tree,entropy,frequencies&p=full) on Nextstrain website (3,564 sample).
+* GISAID Clades (nucleotide based) can be [visualized here](https://nextstrain.org/ncov/global?c=GISAID_clade&d=tree,entropy,frequencies&p=full) on Nextstrain website (3,564 sample).
 
-DOD Clades (nucleotide based) can be [visualized here](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleD?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (14,859 sample).
+* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleD?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (14,859 sample).
 
-DOD Clades (nucleotide based) can be [visualized her](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GENBANK/sample?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (16,427 sample).
+* DOD Clades (nucleotide based) can be [visualized her](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GENBANK/sample?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (16,427 sample).
 
-We eliminated the NextStrain clade system because their first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions, and depending on how many data point you model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs, we furthermore decided not to use the GISAID classification for two reasons:
+We eliminated the time-based clade system because the first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions (see [above](#site-masking-and-minimum-length)), and depending on how many data point you model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs, we furthermore decided not to use the GISAID classification for two reasons:
 
 -- First is simplicity: the DOD Clades are based on mutation from "C to T" on two different sites (241 and 3037) early on the phylogeny Tree of SARS-CoV-2; the C-Clade is based on nucleotide C241/C3037 and T-Clade is nucleotide 241T/3037T, the rest (C.1, C.2, T.1, T.2) easily flows with a similar logic (see below); it is universal no matter haw many data points you are adding; indeed,
 
 -- Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
 
-[GISAID dataset with GISAID clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+* [GISAID dataset with GISAID clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
 
 
-[The same GISAID dataset with the DOD clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increased.
+* [The same GISAID dataset with the DOD clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increased.
 
 DOD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
 
