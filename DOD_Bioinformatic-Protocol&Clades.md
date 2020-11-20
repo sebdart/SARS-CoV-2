@@ -4,7 +4,7 @@
 
 This document is a life document and is updated as often as needed with more detailed information depending on specific requests from the SME's community. Please contact us if you have any question and/or how to make this protocol a better tool for all.
 
-Last update: *20<sup>th</sup> November 2020*.
+Last update: *21<sup>st</sup> November 2020*.
 
 ----
 
@@ -17,8 +17,8 @@ Last update: *20<sup>th</sup> November 2020*.
 * [Tree Dating](#tree-dating)
 * [DOD SARS-CoV-2 Clade System](#dod-sars-cov-2-clade-system)
   * [Why](#why)
-  * [How](#how)
   * [How does it compare with other SARS-CoV-2 clades](#how-does-it-compare-with-other-sars-cov-2-clades)
+  * [How](#how)
 
 ----
 
@@ -82,7 +82,7 @@ Click on *Download All Records*
 *Step 3 of 3:*
 Click on *Select All*
 
-> You will download a file named *sequences.csv*; this file will have to be processed and curred by an R-code script to be bioinformatically compliant with NextStrain's Augur requirement (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 and 2).
+> You will download a file named *sequences.csv*; this file will have to be processed and curated by an R-code script to be bioinformatically compliant with NextStrain's Augur requirement (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 and 2).
 
 **Get the FASTA Data**
 
@@ -97,18 +97,36 @@ Click on *Build Custom*
 *Remove* all default
 *Add* in this order *Geo Location* and *Accession*
 
-> You will download a file named *sequences.fasta*; this file will have to be processed and curred by a Linux Bash script to be bioinformatically compliant with NextStrain's Augur (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 or 2).
+> You will download a file named *sequences.fasta*; this file will have to be processed and curated by a Linux Bash script to be bioinformatically compliant with NextStrain's Augur (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 or 2).
 
 
 ## Curing and Reformatting the Data and Metadata prior to bioinformatic modeling
 
      About DOD's minimum nucleotide completeness in SARS-CoV-2 sequences
 
-## Nucleotide Site Masking
+## Site Masking
 
-We follow the recommendation in masking high sites
+This is an important aspect in our DOD's protocol because it leads to slightly different results in the branching and clade naming in SARS-CoV-2 phylogenetic trees when compared with other methodologies which do not aggressively mask problematic sides.
 
-|    POS    |REF|    ALT    |FILTER |                                 JUST                                  |   GENE    |AA_POS|AA_REF|  AA_ALT   |
+We follow the recommendation from [European Molecular Biology Laboratory, UK](https://www.ebi.ac.uk/) as detailed in [their paper](https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473) and their [GITHUB](https://github.com/W-L/ProblematicSites_SARS-CoV2). Specifically, many mutations seen several times along the phylogenetic tree (ie., highly homoplasic) may be likely the result of contamination, recurrent sequencing errors, or hypermutability, than selection or recombination. Some homoplasic substitutions seem laboratory-specific, suggesting that they might arise from specific combinations of sample preparation, sequencing technology, and consensus calling approaches. Hence, these "suspect mutation" sites are masked as decribed in the Table below.
+
+As commonly done, we mask start and end positions 1–55 and 29804–29903.
+
+We aslo filter out any sequences that have too few resolved characters (ie., less than ***29,400*** reference bases) instead of the more common threshold of *29,000*.
+
+
+| Header          | Description                    |
+|-----------------|--------------------------------|
+|POS              | 1-based position of the variation on the reference |
+|REF              | Reference base |
+|ALT              | List of alternative alleles at the position (IUPAC ambiguity code) |
+|GENE             | Position falls into range of this gene |
+|AA_POS           | Position of amino acid residue within gene |
+|REF_AA           | Reference amino acid residue |
+|ALT_AA           | List of alternative amino acid residues (IUPAC ambiguity code) |
+
+
+|    POS    |REF|    ALT    |FILTER |                          JUSTIFICATION                                |   GENE    |AA_POS|AA_REF|  AA_ALT   |
 |-----------|---|-----------|-------|-----------------------------------------------------------------------|-----------|------|------|-----------|
 |1-55       |.  |.          |mask   |seq_end                                                                |.          |.     |.     |.          |
 |150        |T  |C,Y        |mask   |homoplasic<br>single_src<br>neighbour_linked                           |.          |.     |.     |.          |
@@ -189,18 +207,6 @@ We follow the recommendation in masking high sites
 |29804-29903|.  |.          |mask   |seq_end                                                                |.          |.     |.     |.          |
 
 
-| Header          | Description                    |
-|-----------------|--------------------------------|
-|POS              | 1-based position of the variation on the reference |
-|REF              | Reference base |
-|ALT              | List of alternative alleles at the position (IUPAC ambiguity code) |
-|JUST             | List of reasons for suggested exclusion (tags described in separate table) |
-|GENE             | Position falls into range of this gene |
-|AA_POS           | Position of amino acid residue within gene |
-|REF_AA           | Reference amino acid residue |
-|ALT_AA           | List of alternative amino acid residues (IUPAC ambiguity code) |
-
-
 Descriptions of reasons for mask/caution are as follows:
 
 | Tag                         | Description                                                      |
@@ -221,10 +227,75 @@ Descriptions of reasons for mask/caution are as follows:
 
 ## Tree Construction
 
+Coming soon
+
 ### Tree Dating
+
+Coming soon
+
 
 ## DOD SARS-CoV-2 Clade System
 ### Why
-### How
+
+The "DOD" Clade system of SARS-CoV-2 phylogeny aimed to be easy to understand, universal, and reliable regardless of the size of your dataset (ie., tens of thousands data sample vs. a few thousands samples).
+
+Very roughly, one can create a clade system based either on specific mutations at a specific position (nucleotide based) or a specific mutation at a specific position at a given time (time based).
+
 ### How does it compare with other SARS-CoV-2 clades
 
+Pangolin Clades (nucleotide based) can be--somehow--[visualized here](https://nextstrain.org/ncov/global?c=pangolin_lineage&d=tree,entropy,frequencies&p=full) on NextStrain website (3,564 sample).
+
+NexStrain Clades (time based) can be [visualized here](https://nextstrain.org/ncov/global?c=clade_membership&d=tree,entropy,frequencies&p=full) (3,564 sample).
+
+GISAID Clades (nucleotide based) can be [visualized here](https://nextstrain.org/ncov/global?c=GISAID_clade&d=tree,entropy,frequencies&p=full) on Nextstrain website (3,564 sample).
+
+DOD Clades (nucleotide based) can be [visualized here](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleD?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (14,859 sample).
+
+DOD Clades (nucleotide based) can be [visualized her](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GENBANK/sample?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (16,427 sample).
+
+We eliminated the NextStrain clade system because their first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions, and depending on how many data point you model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs, we furthermore decided not to use the GISAID classification for two reasons:
+
+-- First is simplicity: the DOD Clades are based on mutation from "C to T" on two different sites (241 and 3037) early on the phylogeny Tree of SARS-CoV-2; the C-Clade is based on nucleotide C241/C3037 and T-Clade is nucleotide 241T/3037T, the rest (C.1, C.2, T.1, T.2) easily flows with a similar logic (see below); it is universal no matter haw many data points you are adding; indeed,
+
+-- Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
+
+[GISAID dataset with GISAID clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+
+
+[The same GISAID dataset with the DOD clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increased.
+
+DOD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
+
+
+### How
+
+For instance in NextStrain *clades.tsv* file, one can set the DOD SARS-CoV-2 clades as:
+
+
+|   clade	|   gene	|   site	|   alt     |
+|-----------|-----------|-----------|-----------|
+|   C       |   nuc     | 	241     |	C       |
+|   C       |   nuc     |	3037	|   C       |
+|           |           |           |           |
+|   T       |   nuc     |	241     |   T       |
+|   T       |   nuc     |	3037	|   T       |
+|           |           |           |           |
+|   C.1     |   nuc	    |   241	    |   C       |
+|   C.1     |   nuc	    |   3037	|   C       |
+|   C.1     |   nuc	    |   1397	|   A       |
+|           |           |           |           |
+|   C.2     |   nuc	    |   241	    |   C       |
+|   C.2     |   nuc	    |   3037	|   C       |
+|   C.2     |   nuc	    |   8782	|   T       |
+|   C.2     |   nuc	    |   28144	|   C       |
+|   C.2     |   ORF8    |	84	    |   S       |
+|           |           |           |           |
+|   T.1     |   nuc	    |   241	    |   T       |
+|   T.1     |   nuc	    |   3037	|   T       |
+|   T.1     |   nuc	    |   23403	|   G       |
+|   T.1     |   nuc	    |   25563	|   T       |
+|           |           |           |           |
+|   T.2     |   nuc	    |   241	    |   T       |
+|   T.2     |   nuc	    |   3037	|   T       |
+|   T.2     |   nuc	    |   23403	|   G       |
+|   T.2     |   nuc	    |   28882	|   A       |
