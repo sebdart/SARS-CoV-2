@@ -11,7 +11,8 @@ Last update: *7<sup>th</sup> December 2020*.
 * [Getting the Data](#getting-the-data)
   * [From GISAID](#from-gisaid)
   * [From Genbank](#from-genbank)
-* [Curating and Reformatting the Data and Metadata prior to bioinformatic modeling](#curing-and-reformatting-the-data-and-metadata-prior-to-bioinformatic-modeling)
+* [Curating and Reformatting Fasta and Metadata prior to bioinformatic modeling](#curating-and-reformatting-fasta-and-metadata-prior-to-bioinformatic-modeling)
+* [Sequence Alignement](#sequence-alignement)
 * [Nucleotide Site Masking and Minimum Length](#site-masking-and-minimum-length)
 * [Tree Topology](#tree-topology)
 * [Tree Dating](#tree-dating)
@@ -100,7 +101,7 @@ Click on *Build Custom*
 > You will download a file named *sequences.fasta*; this file will have to be processed and curated by a Linux Bash script to be bioinformatically compliant with NextStrain's Augur (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 or 2).
 
 
-## Curating and Reformatting the Data and Metadata prior to bioinformatic modeling
+## Curating and Reformatting Fasta and Metadata prior to bioinformatic modeling
 
 Depending on how and from where you download the raw data, some curating will be required. We wrote a bash and R-scripts to set the data to be easily ran by bioinformatic codes.
 
@@ -112,16 +113,30 @@ In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences w
 
 In the metdata file from GenBank, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locations for each sample is written as **Continent(Region):Country:Division(State,Province):Location(County,City)**.
 
+Further in the bioinformatic pipeline, any sample with incomplete dates from GISAID (eg., *YYYY*, *YYYY-MM*, *YYYY-XX*) will be also eliminated. An complete date is defined as *YYYY-MM-dd*.
+
+
+## Sequence Alignement
+
+Multiple genomic sequence alignment is performed by the Multiple Alignment using Fast Fourier Transform [MAFFT algorithm v7.471](https://mafft.cbrc.jp/alignment/software/) in Linux.
+
+Each sequences are initially grouped by pack of 250 sequences for small simulations up to 2500 sequences for larger simulations (> 10,000 data points). All MAFFT alignement is performed in SMP parallel:
+
+```
+$ mafft --[reorder](https://mafft.cbrc.jp/alignment/software/manual/manual.html#lbAK) --[anysymbol](https://mafft.cbrc.jp/alignment/software/anysymbol.html) --[nomemsave](https://mafft.cbrc.jp/alignment/software/tips.html) --[adjustdirection](https://mafft.cbrc.jp/alignment/software/adjustdirection.html) --[thread n](https://mafft.cbrc.jp/alignment/software/multithreading.html)  input > output
+```
+An older version of [MAFFT Manual](https://mafft.cbrc.jp/alignment/software/manual/manual.html) is available as well as [Tips](https://mafft.cbrc.jp/alignment/software/tips0.html) and [Change Log](https://mafft.cbrc.jp/alignment/software/changelog.html) with its latest updates.
+
 
 ## Site Masking and Minimum Length
 
-This is an important aspect in our DOD's protocol because it leads to slightly different results in the branching and clade naming in SARS-CoV-2 phylogenetic trees when compared with other methodologies which do not aggressively mask problematic sides.
+This is an important aspect in our DOD's protocol because it leads to slightly different results in the branching and clade naming in SARS-CoV-2 phylogenetic trees when compared with other methodologies which do not aggressively mask *chalenging* sites.
 
-We follow the recommendation from [European Molecular Biology Laboratory, UK](https://www.ebi.ac.uk/) as detailed in [their paper](https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473) and their [GITHUB](https://github.com/W-L/ProblematicSites_SARS-CoV2). Specifically, many mutations seen several times along the phylogenetic tree (ie., highly homoplasic) may be likely the result of contamination, recurrent sequencing errors, or hypermutability, than selection or recombination. Some homoplasic substitutions seem laboratory-specific, suggesting that they might arise from specific combinations of sample preparation, sequencing technology, and consensus calling approaches. Hence, these sites subejct too "suspect mutations" are masked (ie., ignored) in our bioinfomrtaic modeling as decribed in the Table below.
+We follow the recommendations from [European Molecular Biology Laboratory, UK](https://www.ebi.ac.uk/) as detailed in [their paper](https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473) and their [GITHUB](https://github.com/W-L/ProblematicSites_SARS-CoV2). Specifically, many mutations seen several times along the phylogenetic tree (ie., highly homoplasic) may be likely the result of contamination, recurrent sequencing errors, or hypermutability, than selection or recombination. Some homoplasic substitutions seem laboratory-specific, suggesting that they might arise from specific combinations of sample preparation, sequencing technology, and consensus calling approaches. Hence, these sites subejct too "suspect mutations" are masked (ie., ignored) in our bioinfomrtaic modeling as decribed in the Table below.
 
 As commonly done, we systematically mask positions 1–55 and 29804–29903.
 
-We aslo filter out any sequences that have too few resolved characters (ie., less than ***29,400*** reference bases) instead of the more common threshold of *29,000*.
+We aslo filter out any sequences that have too few resolved characters (ie., less than ***29,400*** reference bases) instead of the more common threshold of *29,000* (unless requested/specified otherwise).
 
 
 | Header          | Description                    |
@@ -233,7 +248,6 @@ Descriptions of reasons for mask/caution are as follows:
 | single_src                  | Only observed in samples from a single laboratory |
 
 
-
 ## Tree Topology
 
 Coming soon
@@ -262,7 +276,7 @@ Very roughly, one can create a clade system based either on specific mutations a
 
 * DOD Clades (nucleotide based) can be [visualized her](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GENBANK/sample?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (16,427 sample).
 
-We eliminated the time-based clade system because the first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions (see [above](#site-masking-and-minimum-length)), and depending on how many data point you model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs, we furthermore decided not to use the GISAID classification for two reasons:
+We eliminated the time-based clade system because the first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions (see [above](#site-masking-and-minimum-length)), and depending on how many data points used in your model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs over 35,000 samples, we furthermore decided to use a modified GISAID classification system for two reasons:
 
 -- First is simplicity: the DOD Clades are based on mutation from "C to T" on two different sites (241 and 3037) early on the phylogeny Tree of SARS-CoV-2; the C-Clade is based on nucleotide C241/C3037 and T-Clade is nucleotide 241T/3037T, the rest (C.1, C.2, T.1, T.2) easily flows with a similar logic (see below); it is universal no matter haw many data points you are adding; indeed,
 
@@ -291,13 +305,11 @@ For instance in NextStrain *clades.tsv* file, one can set the DOD SARS-CoV-2 cla
 |           |           |           |           |
 |   C.1     |   nuc	    |   241	    |   C       |
 |   C.1     |   nuc	    |   3037	|   C       |
-|   C.1     |   nuc	    |   1397	|   A       |
+|   C.1     |   nuc	    |   8782	|   T       |
 |           |           |           |           |
 |   C.2     |   nuc	    |   241	    |   C       |
 |   C.2     |   nuc	    |   3037	|   C       |
-|   C.2     |   nuc	    |   8782	|   T       |
-|   C.2     |   nuc	    |   28144	|   C       |
-|   C.2     |   ORF8    |	84	    |   S       |
+|   C.2     |   nuc	    |   1397	|   A       |
 |           |           |           |           |
 |   T.1     |   nuc	    |   241	    |   T       |
 |   T.1     |   nuc	    |   3037	|   T       |
