@@ -56,7 +56,6 @@ Alternatively, one can also download an easy FASTA ready for NextStain Augur bio
 
 > You will download a file named *sequences_YYYY-MM-dd_##-##.fasta.gz* with a FASTA formatted file named *sequences.fasta*
 
-
 ### From Genbank
 
 [GenBank](https://www.ncbi.nlm.nih.gov/genbank/) is a publicly available genetic sequence database, a password free, fully annotated collection of all publicly available DNA sequences data repository maintained by the [US Department of Health & Human Services (HHS)](https://www.hhs.gov/)/[National Institutes of Health (NIH)](https://www.nih.gov/)/[National Center for Biotechnology Information  (NCBI)](https://www.ncbi.nlm.nih.gov/).
@@ -99,7 +98,6 @@ Click on *Build Custom*
 
 > You will download a file named *sequences.fasta*; this file will have to be processed and curated by a Linux Bash script to be bioinformatically compliant with NextStrain's Augur (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 or 2).
 
-
 ## Curating and Reformatting Fasta and Metadata prior to bioinformatic modeling
 
 Depending on how and from where you download the raw data, some curating will be required. We wrote a bash and R-scripts to set the data to be easily ran by bioinformatic codes.
@@ -113,7 +111,6 @@ In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences w
 In the metdata file from GenBank, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locations for each sample is written as **Continent(Region):Country:Division(State,Province):Location(County,City)**.
 
 Further in the bioinformatic pipeline, any sample with incomplete dates from GISAID (eg., *YYYY*, *YYYY-MM*, *YYYY-XX*) will be also eliminated. An complete date is defined as *YYYY-MM-dd*.
-
 
 ## Sequence Alignement
 
@@ -259,7 +256,6 @@ Descriptions of reasons for mask/caution are as follows:
 | neighbour_linked            | Proximal variants displaying near perfect linkage |
 | single_src                  | Only observed in samples from a single laboratory |
 
-
 ## Tree Topology
 
 The Phylogenetic tree inference is based on *Maximum Likelihood inference* methodology with [IQ-TREE v2.0.5](http://www.iqtree.org/) 
@@ -279,7 +275,6 @@ A complete list of all [iqtree commands is available](http://www.iqtree.org/doc/
 
 Note that iqtree, by default, saves the Tree in NEWICK format as *.treefile*, however this step is overridden by augur pipeline, which saves the output as *tree_raw.nwk*, which will be reused for the next step (ie., Tree Dating).
 
-
 ## Tree Dating
 
 The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [TreeTime algorithm v0.7.4](https://treetime.readthedocs.io/en/latest/). This step involves rooting to a reference sequence, working on polytomies (if any), dating, and refining the final Tree topolgy.
@@ -288,14 +283,15 @@ The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [Tr
 $ treetime --tree results/all/tree_raw.nwk --aln results/all/subsampled_alignment.fasta --dates data/metadata.tsv --reroot seq1 seq2 --keep-polytomies False --coalescent const --confidence True --covariation False --clock-filter 4 --branch-length-mode auto
 ```
 
-Rooting with respect to the following two sequences:
+Rooting of SARS-CoV-2 with respect to the following two sequences:
 In GISAID: --reroot Wuhan/Hu-1/2019 Wuhan/WH01/2019  #GISAID Accession Numbers: EPI_ISL_402125 & EPI_ISL_406798
 In GenBank: --reroot China/MN908947 China/LR757998   #GenBank Accession Numbers: MN908947 & LR757998
 
-Note that TreeTime, by default, saves the dated Tree in NEWICK format in a specified *--outdir*, however this step is overridden by augur pipeline, which saves the output as *tree.nwk*.
+Note that TreeTime, by default, saves the dated Tree in NEWICK format in a specified *--outdir*, however this step is overridden by augur pipeline, which saves the output as *tree.nwk* under the *results/all/* directory.
 
-TreeTime is a powerful tool for refining a given Tree; however, it is not parallelized and is not adequate for very large simulations (ie., > 20,000 data points). Hence, we will eventually replace TreeTime by another Tree dating algorithm: [LSD: Least-Squares methods to estimate rates and Dates from serial phylogenies](https://github.com/tothuhien/lsd2), available in [iqtree](http://www.iqtree.org/doc/Dating) itself and also in [R language](https://github.com/tothuhien/Rlsd2).
+A complete list of all available TreeTime commands are [available online](https://treetime.readthedocs.io/en/latest/commands.html).
 
+TreeTime is a powerful tool for refining a given phylogenetic Tree; however, it is not parallelized and is not adequate for very large simulations (ie., > 15,000, 20,000 data points). Hence, we are planing to eventually replace TreeTime by another Tree dating algorithm: [LSD: Least-Squares methods to estimate rates and Dates from serial phylogenies](https://github.com/tothuhien/lsd2), available in [iqtree](http://www.iqtree.org/doc/Dating) itself and also in [R language](https://github.com/tothuhien/Rlsd2).
 
 ## DOD SARS-CoV-2 Clade System
 ### Why
@@ -322,15 +318,14 @@ We eliminated the time-based clade system because the first 2020 "20A" branch is
 
 -- Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
 
-* [GISAID dataset with GISAID clades (14,859 sample)](https://); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+* [GISAID dataset with GISAID clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
 
 
-* [The same GISAID dataset with the DOD clades (14,859 sample)](https://); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
+* [The same GISAID dataset with the DOD clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
 
 DoD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
 
-
-### How
+### Where
 
 For instance in NextStrain *clades.tsv* file, one can set the DOD SARS-CoV-2 clades as:
 
