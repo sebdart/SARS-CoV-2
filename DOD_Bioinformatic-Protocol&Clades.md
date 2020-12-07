@@ -102,15 +102,15 @@ Click on *Build Custom*
 
 ## Curating and Reformatting the Data and Metadata prior to bioinformatic modeling
 
-     Depending on how and from where you download the raw data, some curating will be required. We wrote a bash and R-scripts to set the data to be easily ran by bioinformatic codes.
+Depending on how and from where you download the raw data, some curating will be required. We wrote a bash and R-scripts to set the data to be easily ran by bioinformatic codes.
 
-     A critical aspect is to ensure that the metadata file of a given sample/sequence is named in a similar manner in the FASTA file:
-      - From GenBank: each sample is labelled *Country Name/Accession Number* in both the metdata and Fasta files
-      - From GISAID: each sample is labelled *Country Name/ID/Year* in both the metdata and Fasta files
+A critical aspect is to ensure that the metadata file of a given sample/sequence is named in a similar manner in the FASTA file:
+  - From GenBank: each sample is labelled *Country Name/Accession Number* in both the metdata and Fasta files
+  - From GISAID: each sample is labelled *Country Name/ID/Year* in both the metdata and Fasta files
 
-    In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences with same ID) and all second duplicates by sequences (ie., two different IDs with the exact same nucleotide sequence) are eliminated (ie., the first sample is kept). All nucleaotide sequences are reformatted on one single line (ie., half of the total number of lines in the Fasta file is the total number of SARS-CoV-2 samples available in the Fasta file).
+In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences with same ID) and all second duplicates by sequences (ie., two different IDs with the exact same nucleotide sequence) are eliminated (ie., the first sample is kept). All nucleaotide sequences are reformatted on one single line (ie., half of the total number of lines in the Fasta file is the total number of SARS-CoV-2 samples available in the Fasta file).
 
-    In the metdata file from GenBank, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locationsa for each sample is written as **Continent(Region):Country:Division(State, Province):Location(County, City)**.
+In the metdata file from GenBank, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locations for each sample is written as **Continent(Region):Country:Division(State,Province):Location(County,City)**.
 
 
 ## Site Masking and Minimum Length
