@@ -329,29 +329,28 @@ DoD remains open to all sorts of better suggestions and setups; nothing is set i
 
 For instance in NextStrain *clades.tsv* file, one can set the DOD SARS-CoV-2 clades as:
 
-
-|   clade	|   gene	|   site	|   alt     |
-|-----------|-----------|-----------|-----------|
-|   C       |   nuc     | 	241     |	C       |
-|   C       |   nuc     |	3037	|   C       |
-|           |           |           |           |
-|   T       |   nuc     |	241     |   T       |
-|   T       |   nuc     |	3037	|   T       |
-|           |           |           |           |
-|   C.1     |   nuc	    |   241	    |   C       |
-|   C.1     |   nuc	    |   3037	|   C       |
-|   C.1     |   nuc	    |   8782	|   T       |
-|           |           |           |           |
-|   C.2     |   nuc	    |   241	    |   C       |
-|   C.2     |   nuc	    |   3037	|   C       |
-|   C.2     |   nuc	    |   1397	|   A       |
-|           |           |           |           |
-|   T.1     |   nuc	    |   241	    |   T       |
-|   T.1     |   nuc	    |   3037	|   T       |
-|   T.1     |   nuc	    |   23403	|   G       |
-|   T.1     |   nuc	    |   25563	|   T       |
-|           |           |           |           |
-|   T.2     |   nuc	    |   241	    |   T       |
-|   T.2     |   nuc	    |   3037	|   T       |
-|   T.2     |   nuc	    |   23403	|   G       |
-|   T.2     |   nuc	    |   28882	|   A       |
+|   clade   | nuc sites  |   alt     |
+|-----------|------------|-----------|
+|   C       |   241      |	  C      |
+|   C       |   3037	   |    C      |
+|           |            |           |
+|   T       |   241      |    T      |
+|   T       |   3037	   |    T      |
+|           |            |           |
+|   C.1     |   241	     |    C      |
+|   C.1     |   3037	   |    C      |
+|   C.1     |   8782	   |    T      |
+|           |            |           |
+|   C.2     |   241	     |    C      |
+|   C.2     |   3037	   |    C      |
+|   C.2     |   1397	   |    A      |
+|           |            |           |
+|   T.1     |   241	     |    T      |
+|   T.1     |   3037	   |    T      |
+|   T.1     |   23403	   |    G      |
+|   T.1     |   25563	   |    T      |
+|           |            |           |
+|   T.2     |   241	     |    T      |
+|   T.2     |   3037	   |    T      |
+|   T.2     |   23403	   |    G      |
+|   T.2     |   28882	   |    A      |
