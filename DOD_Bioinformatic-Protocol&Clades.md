@@ -27,8 +27,7 @@ Last update: *7<sup>th</sup> December 2020*.
 ## Getting the Data
 ### From GISAID
 
-You must have an account with [GISAID](https://www.gisaid.org/registration/register/).
-If you hav one, log in to [GISAID](https://www.epicov.org/epi3/)
+Please, login to your [GISAID account](https://www.epicov.org/epi3/). If you need a new account, [register here](https://www.gisaid.org/registration/register/). 
 
 From there:
 
@@ -263,10 +262,10 @@ Descriptions of reasons for mask/caution are as follows:
 
 ## Tree Topology
 
-The Phylogenetic tree inference is based on *Maximum Likelihood inference* from [IQ-TREE v2.0.5](http://www.iqtree.org/) 
+The Phylogenetic tree inference is based on *Maximum Likelihood inference* methodology with [IQ-TREE v2.0.5](http://www.iqtree.org/) 
 
 ```
-iqtree -s results/all/subsampled_alignment.fasta -m GTR -ninit 5 -n 4 -czb  -nt n --output 
+$ iqtree -s results/all/subsampled_alignment.fasta -m GTR -ninit 5 -n 4 -czb  -nt n
 ```
 
 -s: aligned sequences (in this case a likely subsample from all many data available from either GISAID or GenBank)
@@ -283,8 +282,19 @@ Note that iqtree, by default, saves the Tree in NEWICK format as *.treefile*, ho
 
 ## Tree Dating
 
-The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [TreeTime algorithm v0.7.4](https://treetime.readthedocs.io/en/latest/).
+The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [TreeTime algorithm v0.7.4](https://treetime.readthedocs.io/en/latest/). This step involves rooting to a reference sequence, working on polytomies (if any), dating, and refining the final Tree topolgy.
 
+```
+$ treetime --tree results/all/tree_raw.nwk --aln results/all/subsampled_alignment.fasta --dates data/metadata.tsv --reroot seq1 seq2 --keep-polytomies False --coalescent const --confidence True --covariation False --clock-filter 4 --branch-length-mode auto
+```
+
+Rooting with respect to the following two sequences:
+In GISAID: --reroot Wuhan/Hu-1/2019 Wuhan/WH01/2019  #GISAID Accession Numbers: EPI_ISL_402125 & EPI_ISL_406798
+In GenBank: --reroot China/MN908947 China/LR757998   #GenBank Accession Numbers: MN908947 & LR757998
+
+Note that TreeTime, by default, saves the dated Tree in NEWICK format in a specified *--outdir*, however this step is overridden by augur pipeline, which saves the output as *tree.nwk*.
+
+TreeTime is a powerful tool for refining a given Tree; however, it is not parallelized and is not adequate for very large simulations (ie., > 20,000 data points). Hence, we will eventually replace TreeTime by another Tree dating algorithm: [LSD: Least-Squares methods to estimate rates and Dates from serial phylogenies](https://github.com/tothuhien/lsd2), available in [iqtree](http://www.iqtree.org/doc/Dating) itself and also in [R language](https://github.com/tothuhien/Rlsd2).
 
 
 ## DOD SARS-CoV-2 Clade System
@@ -312,12 +322,12 @@ We eliminated the time-based clade system because the first 2020 "20A" branch is
 
 -- Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
 
-* [GISAID dataset with GISAID clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+* [GISAID dataset with GISAID clades (14,859 sample)](https://); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
 
 
-* [The same GISAID dataset with the DOD clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increased.
+* [The same GISAID dataset with the DOD clades (14,859 sample)](https://); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
 
-DOD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
+DoD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
 
 
 ### How
