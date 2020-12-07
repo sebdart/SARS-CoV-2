@@ -318,16 +318,16 @@ We eliminated the time-based clade system because the first 2020 "20A" branch is
 
 -- Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
 
-* [GISAID dataset with GISAID clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+* [GISAID dataset with GISAID clades (14,859 sample)](); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
 
 
-* [The same GISAID dataset with the DOD clades (14,859 sample)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleC?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
+* [The same GISAID dataset with the DOD clades (14,859 sample)](); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
 
 DoD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
 
 ### Where
 
-For instance in NextStrain *clades.tsv* file, one can set the DOD SARS-CoV-2 clades as:
+The DOD SARS-CoV-2 clades are defined as follow (to be defined in NextStrain's *clades.tsv* file):
 
 |   clade   | nuc sites  |   alt     |
 |-----------|------------|-----------|
