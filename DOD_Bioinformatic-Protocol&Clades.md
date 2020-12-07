@@ -123,14 +123,27 @@ Multiple genomic sequence alignment is performed by the Multiple Alignment using
 Each sequences are initially grouped by pack of 250 sequences for small simulations up to 2500 sequences for larger simulations (> 10,000 data points). All MAFFT alignement is performed in SMP parallel:
 
 ```
-$ mafft --[reorder](https://mafft.cbrc.jp/alignment/software/manual/manual.html#lbAK) --[anysymbol](https://mafft.cbrc.jp/alignment/software/anysymbol.html) --[nomemsave](https://mafft.cbrc.jp/alignment/software/tips.html) --[adjustdirection](https://mafft.cbrc.jp/alignment/software/adjustdirection.html) --[thread n](https://mafft.cbrc.jp/alignment/software/multithreading.html)  input > output
+$  mafft --reorder --anysymbol --nomemsave --adjustdirection --thread 8   input > output
 ```
+
+with,
+--[reorder](https://mafft.cbrc.jp/alignment/software/manual/manual.html#lbAK)
+--[anysymbol](https://mafft.cbrc.jp/alignment/software/anysymbol.html)
+--[nomemsave](https://mafft.cbrc.jp/alignment/software/tips.html)
+--[adjustdirection](https://mafft.cbrc.jp/alignment/software/adjustdirection.html)
+--[thread n](https://mafft.cbrc.jp/alignment/software/multithreading.html)
+
 An older version of [MAFFT Manual](https://mafft.cbrc.jp/alignment/software/manual/manual.html) is available as well as [Tips](https://mafft.cbrc.jp/alignment/software/tips0.html) and [Change Log](https://mafft.cbrc.jp/alignment/software/changelog.html) with its latest updates.
 
+All 250/2500 individual pack of sequences will be eventually aggregated together into one large fasta file of aligned sequences: *results/aligned.fasta*
+
+```
+$ cat results/split_alignments/1.fasta results/split_alignments/0.fasta results/split_alignments/3.fasta results/split_alignments/6.fasta results/split_alignments/4.fasta results/split_alignments/8.fasta > results/aligned.fasta
+```
 
 ## Site Masking and Minimum Length
 
-This is an important aspect in our DOD's protocol because it leads to slightly different results in the branching and clade naming in SARS-CoV-2 phylogenetic trees when compared with other methodologies which do not aggressively mask *chalenging* sites.
+This is an important aspect in the DoD's protocol because it leads to slightly different results in the branching and clade naming in SARS-CoV-2 phylogenetic trees when compared with other methodologies which do not aggressively mask *chalenging* sites.
 
 We follow the recommendations from [European Molecular Biology Laboratory, UK](https://www.ebi.ac.uk/) as detailed in [their paper](https://virological.org/t/issues-with-sars-cov-2-sequencing-data/473) and their [GITHUB](https://github.com/W-L/ProblematicSites_SARS-CoV2). Specifically, many mutations seen several times along the phylogenetic tree (ie., highly homoplasic) may be likely the result of contamination, recurrent sequencing errors, or hypermutability, than selection or recombination. Some homoplasic substitutions seem laboratory-specific, suggesting that they might arise from specific combinations of sample preparation, sequencing technology, and consensus calling approaches. Hence, these sites subejct too "suspect mutations" are masked (ie., ignored) in our bioinfomrtaic modeling as decribed in the Table below.
 
@@ -250,11 +263,28 @@ Descriptions of reasons for mask/caution are as follows:
 
 ## Tree Topology
 
-Coming soon
+The Phylogenetic tree inference is based on *Maximum Likelihood inference* from [IQ-TREE v2.0.5](http://www.iqtree.org/) 
+
+```
+iqtree -s results/all/subsampled_alignment.fasta -m GTR -ninit 5 -n 4 -czb  -nt n --output 
+```
+
+-s: aligned sequences (in this case a likely subsample from all many data available from either GISAID or GenBank)
+-m: consensus [substitution model](https://en.wikipedia.org/wiki/Substitution_model) used for SARS-CoV-2, *General Time Reversible model* from [Tavare, 1986](http://www.damtp.cam.ac.uk/user/st321/CV_&_Publications_files/STpapers-pdf/T86.pdf).
+-n: Specify number of iterations to stop.
+-ninit: Specify the number of initial parsimony trees; the Phylogenetic Likelihood Library (PLL) from [Flouri et al., 2015](https://academic.oup.com/sysbio/article/64/2/356/1630375) is used, which generates a random tree (randomized stepwise addition order parsimony tree) with subsequent optimized likelihood evaluation functions and topological rearrangement operations on the Tree (eg., Subtree Pruning and Regrafting-SPR).
+-czb: collapse near zero branches, so that the final tree may be multifurcating. This is useful for bootstrapping in the presence of polytomy to reduce bootstrap supports of short branches. It is a huge time saver for the next step (Tree Dating); however, the "czb" algorithm is not parallelized and rather slow.
+-nt: Specify the number of CPU cores to be used by PLL.
+
+A complete list of all [iqtree commands is available](http://www.iqtree.org/doc/Command-Reference#general-options) as well as a detailed online [iqtree Manual](http://www.iqtree.org/doc/).
+
+Note that iqtree, by default, saves the Tree in NEWICK format as *.treefile*, however this step is overridden by augur pipeline, which saves the output as *tree_raw.nwk*, which will be reused for the next step (ie., Tree Dating).
+
 
 ## Tree Dating
 
-Coming soon
+The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [TreeTime algorithm v0.7.4](https://treetime.readthedocs.io/en/latest/).
+
 
 
 ## DOD SARS-CoV-2 Clade System
