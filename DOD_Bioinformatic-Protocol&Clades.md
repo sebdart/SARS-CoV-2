@@ -1,19 +1,19 @@
-# Department of Defense SARS-CoV-2 bioinformatic Protocol and Clade System
+# Department of Defense SARS-CoV-2 Bioinformatic Protocol and Clade System
 
 ## Table of Content
 
 This document is a life document and is updated as often as needed with more detailed information depending on specific requests from the SME's community. Please contact us if you have any question and/or how to make this protocol a better tool for all.
 
-Last update: *21<sup>st</sup> November 2020*.
+Last update: *7<sup>th</sup> December 2020*.
 
 ----
 
 * [Getting the Data](#getting-the-data)
   * [From GISAID](#from-gisaid)
   * [From Genbank](#from-genbank)
-* [Curating and Reformatting the Data and Metadata prior to bioinformatic modeling](#curating-and-reformatting-the-data-and-metadata-prior-to-bioinformatic-modeling)
+* [Curating and Reformatting the Data and Metadata prior to bioinformatic modeling](#curing-and-reformatting-the-data-and-metadata-prior-to-bioinformatic-modeling)
 * [Nucleotide Site Masking and Minimum Length](#site-masking-and-minimum-length)
-* [Tree Construction](#tree-construction)
+* [Tree Topology](#tree-topology)
 * [Tree Dating](#tree-dating)
 * [DOD SARS-CoV-2 Clade System](#dod-sars-cov-2-clade-system)
   * [Why](#why)
@@ -52,7 +52,7 @@ Select or search the specific sequences you want to download into a FASTA file; 
 
 > You will download a file named *gisaid_hcov-19_YYYY_MM_dd_##.fasta*
 
-Alternatively, one can also download an easy FASTA ready for NextStain Augur bioinformatic pipeline in clicking on *EPiCoV*, *Download*, scrolling down to *Genomic epidemiology*, and clickin on *nexstfasta*.
+Alternatively, one can also download an easy FASTA ready for NextStain Augur bioinformatic pipeline in clicking on *EPiCoV*, *Download*, scrolling down to *Genomic epidemiology*, and clicking on *nexstfasta*.
 
 > You will download a file named *sequences_YYYY-MM-dd_##-##.fasta.gz* with a FASTA formatted file named *sequences.fasta*
 
@@ -102,8 +102,16 @@ Click on *Build Custom*
 
 ## Curating and Reformatting the Data and Metadata prior to bioinformatic modeling
 
-     About DOD's minimum nucleotide completeness in SARS-CoV-2 sequences
-     Running Scripts coming soon.
+     Depending on how and from where you download the raw data, some curating will be required. We wrote a bash and R-scripts to set the data to be easily ran by bioinformatic codes.
+
+     A critical aspect is to ensure that the metadata file of a given sample/sequence is named in a similar manner in the FASTA file:
+      - From GenBank: each sample is labelled *Country Name/Accession Number* in both the metdata and Fasta files
+      - From GISAID: each sample is labelled *Country Name/ID/Year* in both the metdata and Fasta files
+
+    In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences with same ID) and all second duplicates by sequences (ie., two different IDs with the exact same nucleotide sequence) are eliminated (ie., the first sample is kept). All nucleaotide sequences are reformatted on one single line (ie., half of the total number of lines in the Fasta file is the total number of SARS-CoV-2 samples available in the Fasta file).
+
+    In the metdata file from GenBank, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locationsa for each sample is written as **Continent(Region):Country:Division(State, Province):Location(County, City)**.
+
 
 ## Site Masking and Minimum Length
 
@@ -226,11 +234,11 @@ Descriptions of reasons for mask/caution are as follows:
 
 
 
-## Tree Construction
+## Tree Topology
 
 Coming soon
 
-### Tree Dating
+## Tree Dating
 
 Coming soon
 
