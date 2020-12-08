@@ -2,9 +2,9 @@
 
 ## Table of Content
 
-This document is a life document and is updated as often as needed with more detailed information depending on specific requests from the SME's community. Please contact us if you have any question and/or how to make this protocol a better tool for all.
+This document is a living document and is updated as often as needed with more detailed information depending on specific requests from the SME's community. Please contact us if you have any question and/or how to make this protocol a better tool for all.
 
-Last update: *7<sup>th</sup> December 2020*.
+Last update: *8<sup>th</sup> December 2020*.
 
 ----
 
@@ -72,45 +72,42 @@ Click on *Download* (Upper-Right Blue button)
 
 **Get the MetaData**
 
-*Step 1 of 3:*
-Click on *CSV format* under ***Current table view result*** (Right-side)
-
-*Step 2 of 3:*
-Click on *Download All Records*
-
-*Step 3 of 3:*
-Click on *Select All*
+|         Step           |                                                                                  |
+|------------------------|----------------------------------------------------------------------------------|
+|    *Step 1 of 3:*      |     Click on *CSV format* under ***Current table view result*** (Right-side)     |
+|    *Step 2 of 3:*      |     Click on *Download All Records*                                              |
+|    *Step 3 of 3:*      |     Click on *Select All*                                                        |
 
 > You will download a file named *sequences.csv*; this file will have to be processed and curated by an R-code script to be bioinformatically compliant with NextStrain's Augur requirement (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 and 2).
 
 **Get the FASTA Data**
 
-*Step 1 of 3:*
-Click on *Nucleotide* under ***Sequence data (FASTA Format)*** (Left-side)
+|         Step           |                                                                                   |
+|------------------------|------ ----------------------------------------------------------------------------|
+|    *Step 1 of 3:*      |     Click on *Nucleotide* under ***Sequence data (FASTA Format)*** (Left-side)    |
+|    *Step 2 of 3:*      |     Click on *Download All Records*                                               |
+|    *Step 3 of 3:*      |     Click on *Build Custom*                                                       |
+|                        |     *Remove* all default                                                          |
+|                        |     *Add* in this order: *Geo Location* and then *Accession*                      |
 
-*Step 2 of 3:*
-Click on *Download All Records*
-
-*Step 3 of 3:*
-Click on *Build Custom*
-*Remove* all default
-*Add* in this order *Geo Location* and *Accession*
 
 > You will download a file named *sequences.fasta*; this file will have to be processed and curated by a Linux Bash script to be bioinformatically compliant with NextStrain's Augur (or any other phylodyanmic/phylogeographic codes, such as BEAST 1 or 2).
 
 ## Curating and Reformatting Fasta and Metadata prior to bioinformatic modeling
 
-Depending on how and from where you download the raw data, some curating will be required. We wrote a bash and R-scripts to set the data to be easily ran by bioinformatic codes.
+Depending on how and from where you download the raw data, some curating will be required. We wrote bash and R-scripts to set the SARS-CoV-2 Fasta data and metaData to be easily ran by phylodynamic bioinformatic codes.
 
 A critical aspect is to ensure that the metadata file of a given sample/sequence is named in a similar manner in the FASTA file:
-  - From GenBank: each sample is labelled *Country Name/Accession Number* in both the metdata and Fasta files
-  - From GISAID: each sample is labelled *Country Name/ID/Year* in both the metdata and Fasta files
+  - From GenBank: each sample is labelled *Country Name/Accession Number* in both the metaCata and Fasta files.
+  - From GISAID: each sample is labelled *Country Name/ID/Year* in both the metaData and Fasta files.
 
-In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences with same ID) and all second duplicates by sequences (ie., two different IDs with the exact same nucleotide sequence) are eliminated (ie., the first sample is kept). All nucleaotide sequences are reformatted on one single line (ie., half of the total number of lines in the Fasta file is the total number of SARS-CoV-2 samples available in the Fasta file).
+In the Fasta file, all second duplicates by IDs (ie., two nucleotide sequences with same ID) and all second duplicates by sequences (ie., two different IDs with the exact same nucleotide sequence) are eliminated (ie., the first is kept). All nucleotide sequences are reformatted on one single line (ie., half of the total number of lines in the Fasta file is the total number of SARS-CoV-2 samples available in the Fasta file).
 
-In the metdata file from GenBank, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locations for each sample is written as **Continent(Region):Country:Division(State,Province):Location(County,City)**.
+In the metData file from GenBank only, all incomplete dates and/or unknown Country names are eliminated. Great care is taken to ensure that all GenBank locations for each sample is written as **Continent(Region):Country:Division(State,Province):Location(County,City)**.
 
 Further in the bioinformatic pipeline, any sample with incomplete dates from GISAID (eg., *YYYY*, *YYYY-MM*, *YYYY-XX*) will be also eliminated. An complete date is defined as *YYYY-MM-dd*.
+
+Bash and R-codes ara available on [DoD/NGA GITHUB](https://gitlab.gs.mil/Dartevelle.Sebastien.1503290509/ncov) with a CAC card or upon request.
 
 ## Sequence Alignement
 
@@ -118,24 +115,26 @@ Multiple genomic sequence alignment is performed by the Multiple Alignment using
 
 Each sequences are initially grouped by pack of 250 sequences for small simulations up to 2500 sequences for larger simulations (> 10,000 data points). All MAFFT alignement is performed in SMP parallel:
 
-```
+```shell
 $  mafft --reorder --anysymbol --nomemsave --adjustdirection --thread 8   input > output
 ```
 
 with,
---[reorder](https://mafft.cbrc.jp/alignment/software/manual/manual.html#lbAK)
---[anysymbol](https://mafft.cbrc.jp/alignment/software/anysymbol.html)
---[nomemsave](https://mafft.cbrc.jp/alignment/software/tips.html)
---[adjustdirection](https://mafft.cbrc.jp/alignment/software/adjustdirection.html)
---[thread n](https://mafft.cbrc.jp/alignment/software/multithreading.html)
+* [reorder](https://mafft.cbrc.jp/alignment/software/manual/manual.html#lbAK).
+* [anysymbol](https://mafft.cbrc.jp/alignment/software/anysymbol.html).
+* [nomemsave](https://mafft.cbrc.jp/alignment/software/tips.html).
+* [adjustdirection](https://mafft.cbrc.jp/alignment/software/adjustdirection.html).
+* [thread n](https://mafft.cbrc.jp/alignment/software/multithreading.html).
 
 An older version of [MAFFT Manual](https://mafft.cbrc.jp/alignment/software/manual/manual.html) is available as well as [Tips](https://mafft.cbrc.jp/alignment/software/tips0.html) and [Change Log](https://mafft.cbrc.jp/alignment/software/changelog.html) with its latest updates.
 
-All 250/2500 individual pack of sequences will be eventually aggregated together into one large fasta file of aligned sequences: *results/aligned.fasta*
+All 250/2500 individual pack of sequences will be eventually aggregated together into one large fasta file of aligned sequences: *results/aligned.fasta*.
 
+```shell
+cat results/split_alignments/1.fasta results/split_alignments/0.fasta results/split_alignments/3.fasta results/split_alignments/6.fasta results/split_alignments/4.fasta results/split_alignments/8.fasta > results/aligned.fasta
 ```
-$ cat results/split_alignments/1.fasta results/split_alignments/0.fasta results/split_alignments/3.fasta results/split_alignments/6.fasta results/split_alignments/4.fasta results/split_alignments/8.fasta > results/aligned.fasta
-```
+
+.
 
 ## Site Masking and Minimum Length
 
@@ -240,6 +239,7 @@ We aslo filter out any sequences that have too few resolved characters (ie., les
 |29804-29903|.  |.          |mask   |seq_end                                                                |.          |.     |.     |.          |
 
 
+
 Descriptions of reasons for mask/caution are as follows:
 
 | Tag                         | Description                                                      |
@@ -256,72 +256,80 @@ Descriptions of reasons for mask/caution are as follows:
 | neighbour_linked            | Proximal variants displaying near perfect linkage |
 | single_src                  | Only observed in samples from a single laboratory |
 
+
 ## Tree Topology
 
 The Phylogenetic tree inference is based on *Maximum Likelihood inference* methodology with [IQ-TREE v2.0.5](http://www.iqtree.org/) 
 
-```
+```shell
 $ iqtree -s results/all/subsampled_alignment.fasta -m GTR -ninit 5 -n 4 -czb  -nt n
 ```
 
--s: aligned sequences (in this case a likely subsample from all many data available from either GISAID or GenBank)
--m: consensus [substitution model](https://en.wikipedia.org/wiki/Substitution_model) used for SARS-CoV-2, *General Time Reversible model* from [Tavare, 1986](http://www.damtp.cam.ac.uk/user/st321/CV_&_Publications_files/STpapers-pdf/T86.pdf).
--n: Specify number of iterations to stop.
--ninit: Specify the number of initial parsimony trees; the Phylogenetic Likelihood Library (PLL) from [Flouri et al., 2015](https://academic.oup.com/sysbio/article/64/2/356/1630375) is used, which generates a random tree (randomized stepwise addition order parsimony tree) with subsequent optimized likelihood evaluation functions and topological rearrangement operations on the Tree (eg., Subtree Pruning and Regrafting-SPR).
--czb: collapse near zero branches, so that the final tree may be multifurcating. This is useful for bootstrapping in the presence of polytomy to reduce bootstrap supports of short branches. It is a huge time saver for the next step (Tree Dating); however, the "czb" algorithm is not parallelized and rather slow.
--nt: Specify the number of CPU cores to be used by PLL.
+* -s: aligned sequences (in this case a likely subsample from all many data available from either GISAID or GenBank).
+
+* -m: consensus [substitution model](https://en.wikipedia.org/wiki/Substitution_model) used for SARS-CoV-2, *General Time Reversible model* from [Tavare, 1986](http://www.damtp.cam.ac.uk/user/st321/CV_&_Publications_files/STpapers-pdf/T86.pdf).
+
+* -n: Specify number of iterations to stop.
+
+* -ninit: Specify the number of initial parsimony trees; the Phylogenetic Likelihood Library (PLL) from [Flouri et al., 2015](https://academic.oup.com/sysbio/article/64/2/356/1630375) is used, which generates a random tree (randomized stepwise addition order parsimony tree) with subsequent optimized likelihood evaluation functions and topological rearrangement operations on the Tree (eg., Subtree Pruning and Regrafting-SPR).
+
+* -czb: collapse near zero branches, so that the final tree may be multifurcating. This is useful for bootstrapping in the presence of polytomy to reduce bootstrap supports of short branches. It is a huge time saver for the next step (Tree Dating); however, the "czb" algorithm is not parallelized and rather slow.
+
+* -nt: Specify the number of CPU cores to be used by PLL.
 
 A complete list of all [iqtree commands is available](http://www.iqtree.org/doc/Command-Reference#general-options) as well as a detailed online [iqtree Manual](http://www.iqtree.org/doc/).
 
 Note that iqtree, by default, saves the Tree in NEWICK format as *.treefile*, however this step is overridden by augur pipeline, which saves the output as *tree_raw.nwk*, which will be reused for the next step (ie., Tree Dating).
 
+
 ## Tree Dating
 
-The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [TreeTime algorithm v0.7.4](https://treetime.readthedocs.io/en/latest/). This step involves rooting to a reference sequence, working on polytomies (if any), dating, and refining the final Tree topolgy.
+The Phylogenetic tree dating is based on *Maximum Likelihood inference* from [TreeTime algorithm v0.8.0](https://treetime.readthedocs.io/en/latest/). This step involves rooting to a reference sequence, working on polytomies (if any), dating, and refining the final Tree topolgy.
 
-```
+```shell
 $ treetime --tree results/all/tree_raw.nwk --aln results/all/subsampled_alignment.fasta --dates data/metadata.tsv --reroot seq1 seq2 --keep-polytomies False --coalescent const --confidence True --covariation False --clock-filter 4 --branch-length-mode auto
 ```
 
 Rooting of SARS-CoV-2 with respect to the following two sequences:
-In GISAID: --reroot Wuhan/Hu-1/2019 Wuhan/WH01/2019  #GISAID Accession Numbers: EPI_ISL_402125 & EPI_ISL_406798
-In GenBank: --reroot China/MN908947 China/LR757998   #GenBank Accession Numbers: MN908947 & LR757998
+
+* In GISAID: `--reroot Wuhan/Hu-1/2019 Wuhan/WH01/2019`, with GISAID Accession Numbers: *EPI_ISL_402125* & *EPI_ISL_406798*
+* In GenBank: `--reroot China/MN908947 China/LR757998`, with GenBank Accession Numbers: *MN908947* & *LR757998*
 
 Note that TreeTime, by default, saves the dated Tree in NEWICK format in a specified *--outdir*, however this step is overridden by augur pipeline, which saves the output as *tree.nwk* under the *results/all/* directory.
 
+We do not normally impose a constant rate of mutation and its standard deviation, which will be estimated from our largest samples available by [least-squares regression by TreeTime](https://treetime.readthedocs.io/en/latest/tutorials/clock.html). However, for very small simulation (ie., sample less than < 10,000 data points), we set a constant rates: `--clock-rate 0.0008 --clock-std-dev 0.0004` as commonly done in the community.
+
 A complete list of all available TreeTime commands are [available online](https://treetime.readthedocs.io/en/latest/commands.html).
 
-TreeTime is a powerful tool for refining a given phylogenetic Tree; however, it is not parallelized and is not adequate for very large simulations (ie., > 15,000, 20,000 data points). Hence, we are planing to eventually replace TreeTime by another Tree dating algorithm: [LSD: Least-Squares methods to estimate rates and Dates from serial phylogenies](https://github.com/tothuhien/lsd2), available in [iqtree](http://www.iqtree.org/doc/Dating) itself and also in [R language](https://github.com/tothuhien/Rlsd2).
+TreeTime is a powerful tool for refining a given phylogenetic Tree, its topology and dating it; however, it is not parallelized and is not adequate for very large simulations (ie., > 20,000 data points). Hence, we are planing to eventually replace TreeTime by another Tree dating algorithm: [LSD: Least-Squares methods to estimate rates and Dates from serial phylogenies](https://github.com/tothuhien/lsd2), available by default in [iqtree](http://www.iqtree.org/doc/Dating) itself and also in [R language](https://github.com/tothuhien/Rlsd2).
 
 ## DOD SARS-CoV-2 Clade System
 ### Why
 
-The "DOD" Clade system of SARS-CoV-2 phylogeny aimed to be easy to understand, universal, and reliable regardless of the size of your dataset (ie., tens of thousands data sample vs. a few thousands samples).
+The Department of Defense Clade system of SARS-CoV-2 phylogeny aimed to be easy to understand, universal, and reliable regardless of the size of your dataset (ie., tens of thousands data sample vs. a few thousands samples).
 
 Very roughly, one can create a clade system based either on specific mutations at a specific position (nucleotide based) or a specific mutation at a specific position at a given time (time based).
 
 ### How does it compare with other SARS-CoV-2 clades
 
-* Pangolin Clades (nucleotide based) can be--somehow--[visualized here](https://nextstrain.org/ncov/global?c=pangolin_lineage&d=tree,entropy,frequencies&p=full) on NextStrain website (3,564 sample).
+* Pangolin Clades (nucleotide based) can be--somehow--[visualized here](https://nextstrain.org/ncov/global?c=pangolin_lineage&d=tree,entropy,frequencies&p=full) on NextStrain website (about 3,500 samples).
 
-* NexStrain Clades (time based) can be [visualized here](https://nextstrain.org/ncov/global?c=clade_membership&d=tree,entropy,frequencies&p=full) (3,564 sample).
+* NexStrain Clades (time based) can be [visualized here](https://nextstrain.org/ncov/global?c=clade_membership&d=tree,entropy,frequencies&p=full) (about 3,500 samples).
 
-* GISAID Clades (nucleotide based) can be [visualized here](https://nextstrain.org/ncov/global?c=GISAID_clade&d=tree,entropy,frequencies&p=full) on Nextstrain website (3,564 sample).
+* GISAID Clades (nucleotide based) can be [visualized here](https://nextstrain.org/ncov/global?c=GISAID_clade&d=tree,entropy,frequencies&p=full) on Nextstrain website (about 3,500 samples).
 
-* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GISAID/subsampleD?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (14,859 sample).
+* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov2?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (about 15,000 samples).
 
-* DOD Clades (nucleotide based) can be [visualized her](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2/GENBANK/sample?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (16,427 sample).
+* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov2?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (about 15,000 samples).
 
-We eliminated the time-based clade system because the first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions (see [above](#site-masking-and-minimum-length)), and depending on how many data points used in your model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs over 35,000 samples, we furthermore decided to use a modified GISAID classification system for two reasons:
+We eliminated the time-based clade system because the first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions (see above), and depending on how many data points used in your model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs over 35,000 samples, we furthermore decided to use a modified GISAID classification system for two reasons:
 
--- First is simplicity: the DOD Clades are based on mutation from "C to T" on two different sites (241 and 3037) early on the phylogeny Tree of SARS-CoV-2; the C-Clade is based on nucleotide C241/C3037 and T-Clade is nucleotide 241T/3037T, the rest (C.1, C.2, T.1, T.2) easily flows with a similar logic (see below); it is universal no matter haw many data points you are adding; indeed,
+* First is simplicity: the DOD Clades are based on mutation from "C to T" on two different sites (241 and 3037) early on the phylogeny Tree of SARS-CoV-2; the C-Clade is based on nucleotide C241/C3037 and T-Clade is nucleotide 241T/3037T, the rest (C.1, C.2, T.1, T.2) easily flows with a similar logic (see below); it is universal no matter haw many data points you are adding; indeed,
 
--- Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
+* Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
 
-* [GISAID dataset with GISAID clades (14,859 sample)](); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
-
-
-* [The same GISAID dataset with the DOD clades (14,859 sample)](); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
+  * [GISAID dataset with GISAID clades (14,859 samples)](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov-2?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+  * [The same GISAID dataset with the DOD clades (14,859 samples)](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov-2?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
 
 DoD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
 
