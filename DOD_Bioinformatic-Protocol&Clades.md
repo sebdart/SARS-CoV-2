@@ -83,7 +83,7 @@ Click on *Download* (Upper-Right Blue button)
 **Get the FASTA Data**
 
 |         Step           |                                                                                   |
-|------------------------|------ ----------------------------------------------------------------------------|
+|------------------------|-----------------------------------------------------------------------------------|
 |    *Step 1 of 3:*      |     Click on *Nucleotide* under ***Sequence data (FASTA Format)*** (Left-side)    |
 |    *Step 2 of 3:*      |     Click on *Download All Records*                                               |
 |    *Step 3 of 3:*      |     Click on *Build Custom*                                                       |
@@ -318,9 +318,9 @@ Very roughly, one can create a clade system based either on specific mutations a
 
 * GISAID Clades (nucleotide based) can be [visualized here](https://nextstrain.org/ncov/global?c=GISAID_clade&d=tree,entropy,frequencies&p=full) on Nextstrain website (about 3,500 samples).
 
-* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov2?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (about 15,000 samples).
+* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov2.dev.east.paas.nga.mil/sars-cov2?d=tree,entropy,frequencies&p=full) on NGA website with GISAID only data (about 15,000 samples).
 
-* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov2?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (about 15,000 samples).
+* DOD Clades (nucleotide based) can be [visualized here](https://sars-cov2.dev.east.paas.nga.mil/sars-cov2?d=tree,entropy,frequencies&p=full) on NGA website with GenBank only data (about 15,000 samples).
 
 We eliminated the time-based clade system because the first 2020 "20A" branch is within 15 days from December 2019; depending on the time-dating model assumptions (ie., constant mutation clock throughout the year), depending on your site masking assumptions (see above), and depending on how many data points used in your model (3,564 vs. 16,427 vs 35,000 samples), the "20A" clade shifts towards the end of December 2019, which would make under that time-based logic a new clade "19C" ... Of course, all models have their own assumptions but this would create confusion---So, we decided to move to a nucleotide based type of classification. After many modeling runs over 35,000 samples, we furthermore decided to use a modified GISAID classification system for two reasons:
 
@@ -328,8 +328,8 @@ We eliminated the time-based clade system because the first 2020 "20A" branch is
 
 * Second, well precisely, it is universal: the other clades systems start to get mixed up across the phylogentic tree when your dataset increase in size; at first (ie., small dataset), it looks good with "only" 3,564 data points but then it gets messier and messier as you add many more data points; the worse is when you hit many tens of thousands of data point ... One can have an idea of this from our work when we calculated the two clade systems with these larger samples (DOD vs. GISAID clades):
 
-  * [GISAID dataset with GISAID clades (14,859 samples)](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov-2?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
-  * [The same GISAID dataset with the DOD clades (14,859 samples)](https://sars-cov-2.dev.east.paas.nga.mil/sars-cov-2?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
+  * [GISAID dataset with GISAID clades (14,859 samples)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2?c=GISAID_clade&d=tree,entropy,frequencies&p=full); one can see with this larger dataset that the Clade "O" and "G" start to become distributed across the whole Tree, regardless of its Clade membership; it gets worse when you hit 25,000 samples and on.
+  * [The same GISAID dataset with the DOD clades (14,859 samples)](https://sars-cov2.dev.east.paas.nga.mil/sars-cov-2?d=tree,entropy,frequencies&p=full); One can visualize with this same (larger) dataset that the Clade T (and T.1, T.2) and C (and C.1, C.2) do not get inter-mixed as the dataset increases in size.
 
 DoD remains open to all sorts of better suggestions and setups; nothing is set in stones; we remain flexible with the best path forward for a better SARS-CoV-2 Clade system.
 
